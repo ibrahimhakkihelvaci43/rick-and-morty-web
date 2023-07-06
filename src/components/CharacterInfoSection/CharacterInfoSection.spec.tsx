@@ -15,7 +15,7 @@ test('renders title', () => {
 	expect(screen.getByText(props.title)).toBeInTheDocument()
 })
 
-test('renders items', () => {
+test('renders items correctly', () => {
 	render(<CharacterInfoSection {...props} />)
 
 	for (const item of props.items) {
