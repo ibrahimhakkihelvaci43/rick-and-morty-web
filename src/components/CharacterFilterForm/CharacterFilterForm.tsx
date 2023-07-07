@@ -1,3 +1,4 @@
+import { IErrorMessages, validateForm } from '~/utils/validateForm/validateForm'
 import Button from '../Button/Button'
 import Select from '../Select/Select'
 import { ISelectItem } from '../Select/Select.types'
@@ -12,27 +13,11 @@ const CharacterFilterForm = ({ species, genders, situations, onSubmit }: ICharac
 		status: null,
 	})
 
-	const [errorMessages, setErrorMessages] = useState({
+	const [errorMessages, setErrorMessages] = useState<IErrorMessages>({
 		type: null,
 		gender: null,
 		status: null,
 	})
-
-	const validateForm = () => {
-		let hasError = false
-
-		for (const key in formData) {
-			if (!formData[key as keyof IFormData]) {
-				setErrorMessages((prevErrors) => ({
-					...prevErrors,
-					[key]: `Please select a ${key}.`,
-				}))
-				hasError = true
-			}
-		}
-
-		return hasError
-	}
 
 	const onChange = (name: string, value: ISelectItem) => {
 		setFormData({
@@ -47,10 +32,12 @@ const CharacterFilterForm = ({ species, genders, situations, onSubmit }: ICharac
 	}
 
 	const onSubmitForm = () => {
-		let hasError = validateForm()
+		const { hasError, errorMessages } = validateForm(formData)
 
 		if (!hasError) {
 			onSubmit(formData)
+		} else {
+			setErrorMessages(errorMessages)
 		}
 	}
 

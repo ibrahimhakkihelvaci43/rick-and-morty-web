@@ -4,7 +4,7 @@ import props from './CharacterFilterForm.testprops'
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-test('renders elements corretly', () => {
+test('renders CharacterFilterForm', () => {
 	render(<CharacterFilterForm {...props} />)
 })
 
@@ -35,6 +35,6 @@ test('calls onSubmit func', async () => {
 	expect(onSubmit).toHaveBeenCalledWith({
 		type: props.species[0],
 		gender: props.genders[0],
-		status: props.situations[0],  
+		status: props.situations[0],
 	})
 })
