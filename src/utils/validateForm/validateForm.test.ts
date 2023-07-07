@@ -1,4 +1,4 @@
-import { validateForm } from './validateForm'
+import { validateForm } from './index'
 
 test('should return no errors if all fields are filled', () => {
 	const formData = {
