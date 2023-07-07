@@ -21,9 +21,9 @@ test('if isOpen prop is true, the modal is not visible', () => {
 })
 
 test('when the cross icon is pressed, onClickClose function is called', async () => {
-	const onClickClose = jest.fn()
-	render(<Modal {...props} isOpen={true} onClickClose={onClickClose} />)
+	const onCloseModal = jest.fn()
+	render(<Modal {...props} isOpen={true} onCloseModal={onCloseModal} />)
 
 	await userEvent.click(screen.getByRole('img'))
-	expect(onClickClose).toHaveBeenCalled()
+	expect(onCloseModal).toHaveBeenCalled()
 })

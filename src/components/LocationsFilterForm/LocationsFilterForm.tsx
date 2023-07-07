@@ -1,4 +1,4 @@
-import { IErrorMessages, validateForm } from '~/utils/validateForm/validateForm'
+import { IErrorMessages, validateForm } from '~/utils/validateForm'
 import Button from '../Button/Button'
 import Select from '../Select/Select'
 import { ISelectItem } from '../Select/Select.types'

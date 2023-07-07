@@ -4,6 +4,6 @@ const ModalProps: IModal = {
 	title: 'Title',
 	isOpen: true,
 	children: 'content',
-	onClickClose: () => {},
+	onCloseModal: () => {},
 }
 export default ModalProps

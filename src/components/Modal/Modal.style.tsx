@@ -5,12 +5,14 @@ export const ModalBase = styled.div`
 	min-width: 312px;
 	position: absolute;
 	left: 50%;
-	top: 50%;
+	top: 36%;
 	transform: translate(-50%, -50%);
 	box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.14), 0px 3px 4px 0px rgba(0, 0, 0, 0.12),
 		0px 1px 5px 0px rgba(0, 0, 0, 0.2);
 	border-radius: 4px;
 	padding: 16px 16px 19px 16px;
+	z-index: 999;
+	background-color: #fff;
 `
 
 export const Header = styled.div`
@@ -32,4 +34,14 @@ export const StyledIcon = styled(Close)`
 
 export const Content = styled.div`
 	margin-top: 16px;
+`
+
+export const Overlay = styled.div`
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 998;
 `
