@@ -14,7 +14,6 @@ test('opens menu when clicked', async () => {
 	expect(screen.getByRole('list')).toBeInTheDocument()
 })
 
-
 test('calls function when list item is clicked', async () => {
 	const onClick = jest.fn()
 	render(<Select {...props} onClick={onClick} />)
@@ -22,5 +21,14 @@ test('calls function when list item is clicked', async () => {
 	await userEvent.click(screen.getByRole('select'))
 	await userEvent.click(screen.getAllByRole('listitem')[0])
 
-	expect(onClick).toHaveBeenCalledWith(props.items[0].value)
+	expect(onClick).toHaveBeenCalledWith(props.items[0])
+})
+
+test('when click on element, placeholder changes', async () => {
+	render(<Select {...props} />)
+
+	await userEvent.click(screen.getByRole('select'))
+	await userEvent.click(screen.getAllByRole('listitem')[0])
+
+	expect(screen.getByText(props.items[0].label)).toBeInTheDocument()
 })

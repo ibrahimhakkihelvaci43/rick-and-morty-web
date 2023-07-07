@@ -1,34 +1,43 @@
 import { useState } from 'react'
-import { SelectBase, Icon, Content, Label, List, ListItem } from './Select.style'
-import { ISelect } from './Select.types'
+import { SelectBase, Icon, Content, Label, List, ListItem, ErrorMessage } from './Select.style'
+import { ISelectItem, ISelect } from './Select.types'
 import ArrowDown from '~/assets/icons/ArrowDown'
 import ArrowUp from '~/assets/icons/ArrowUp'
+import OutsideClickHandler from 'react-outside-click-handler'
 
-const Select = ({ placeholder, items, onClick }: ISelect) => {
+const Select = ({ placeholder, items, errorMessage, onClick }: ISelect) => {
 	const [isActive, setIsActive] = useState(false)
+	const [selectedItem, setSelectedItem] = useState<ISelectItem | null>(null)
 
-	const onClickItem = (value: string) => {
+	const onClickItem = (item: ISelectItem) => {
 		setIsActive(false)
-		onClick(value)
-		console.log(value)
+		onClick(item)
+		setSelectedItem(item)
 	}
 
 	return (
-		<SelectBase role='select' onClick={() => setIsActive(!isActive)}>
-			<Label>{placeholder}</Label>
-			<Icon>{isActive ? <ArrowUp /> : <ArrowDown />}</Icon>
-			{isActive && (
-				<Content>
-					<List>
-						{items.map((item, index) => (
-							<ListItem key={index} onClick={() => onClickItem(item.value)}>
-								{item.label}
-							</ListItem>
-						))}
-					</List>
-				</Content>
-			)}
-		</SelectBase>
+		<OutsideClickHandler
+			onOutsideClick={() => {
+				setIsActive(false)
+			}}
+		>
+			<SelectBase role="select" onClick={() => setIsActive(!isActive)}>
+				<Label>{selectedItem ? selectedItem.label : placeholder}</Label>
+				<Icon>{isActive ? <ArrowUp /> : <ArrowDown />}</Icon>
+				{isActive && (
+					<Content>
+						<List>
+							{items.map((item, index) => (
+								<ListItem key={index} onClick={() => onClickItem(item)}>
+									{item.label}
+								</ListItem>
+							))}
+						</List>
+					</Content>
+				)}
+			</SelectBase>
+			{errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+		</OutsideClickHandler>
 	)
 }
 

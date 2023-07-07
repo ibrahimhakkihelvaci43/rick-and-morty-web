@@ -1,13 +1,12 @@
 import styled from 'styled-components'
 
 export const SelectBase = styled.div`
-	width: 280px;
+	width: 100%;
 	height: 56px;
 	border: 1px solid #00000080;
 	border-radius: 8px;
 	position: relative;
 	cursor: pointer;
-	margin: 50px;
 `
 
 export const Icon = styled.div`
@@ -22,6 +21,8 @@ export const Content = styled.div`
 	top: calc(100% + 8px);
 	box-shadow: rgb(0 0 0 / 20%) 0px 5px 5px -3px, rgb(0 0 0 / 14%) 0px 8px 10px 1px, rgb(0 0 0 / 12%) 0px 3px 14px 2px;
 	border-radius: 8px;
+	background-color: #fff;
+	z-index: 999;
 `
 
 export const Label = styled.div`
@@ -43,4 +44,9 @@ export const ListItem = styled.li`
 	&:hover {
 		background-color: whitesmoke;
 	}
+`
+
+export const ErrorMessage = styled.ul`
+	color: #ff4545;
+	margin-top: 4px;
 `
