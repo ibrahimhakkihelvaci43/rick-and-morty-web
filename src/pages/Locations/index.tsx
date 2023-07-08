@@ -44,7 +44,7 @@ const Locations = () => {
 	return (
 		<LocationsBase>
 			<PageHeader
-				image={<StyledImage src="/images/Locations.png" width={174} height={136} alt="rick-and-morty-logo" />}
+				image={<StyledImage src="/images/Locations.png" width={174} height={136} alt="locations" />}
 				onChangeSearch={() => {}}
 				onClickAdvancedFilters={() => setIsFilterModalOpen(true)}
 			/>
