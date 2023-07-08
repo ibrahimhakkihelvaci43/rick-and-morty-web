@@ -3,6 +3,8 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
 
+jest.mock('next/router', () => require('next-router-mock'))
+
 test('renders Navbar', () => {
 	render(<Navbar />)
 })

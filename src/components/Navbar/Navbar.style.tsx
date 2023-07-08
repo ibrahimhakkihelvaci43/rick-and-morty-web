@@ -39,7 +39,7 @@ export const Content = styled.div`
 	gap: 46px;
 `
 
-export const StyledLink = styled(Link)`
+export const StyledLink = styled.div`
 	text-decoration: none;
 	color: #000;
 	font-size: 24px;

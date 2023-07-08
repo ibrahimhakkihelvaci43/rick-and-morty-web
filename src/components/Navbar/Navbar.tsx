@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Content, NavbarBase, StyledIcon, Header, StyledLink } from './Navbar.style'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false)
+	const router = useRouter()
 
 	const links = [
 		{
@@ -12,13 +14,18 @@ const Navbar = () => {
 		},
 		{
 			label: 'Locations',
-			href: '/locations',
+			href: '/Locations',
 		},
 		{
 			label: 'Episodes',
-			href: '/episodes',
+			href: '/Episodes',
 		},
 	]
+
+	const onClickItem = (href: string) => {
+		router.push(href)
+		setIsOpen(false)
+	}
 
 	useEffect(() => {
 		if (isOpen) {
@@ -37,7 +44,7 @@ const Navbar = () => {
 			{isOpen && (
 				<Content>
 					{links.map((link, index) => (
-						<StyledLink key={index} href={link.href}>
+						<StyledLink role='link' key={index} onClick={() => onClickItem(link.href)}>
 							{link.label}
 						</StyledLink>
 					))}
