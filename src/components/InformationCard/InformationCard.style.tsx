@@ -2,8 +2,6 @@ import styled from 'styled-components'
 import NavigateNext from '~/assets/icons/NavigateNext'
 
 export const InformationCardBase = styled.div`
-	margin: 50px;
-	width: 312px;
 	height: 128px;
 	border-radius: 4px;
 	background-color: #fafafa;

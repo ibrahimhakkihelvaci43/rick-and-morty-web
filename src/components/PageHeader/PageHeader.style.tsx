@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 
-export const PageHeaderBase = styled.div``
+export const PageHeaderBase = styled.div`
+	display: flex;
+	flex-direction: column;
+`
 
 export const Filters = styled.div`
 	display: flex;
