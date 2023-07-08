@@ -1,11 +1,7 @@
 import styled from 'styled-components'
 import NavigateNext from '~/assets/icons/NavigateNext'
 
-export const CharacterInfoSectionBase = styled.div`
-	width: 280px;
-	height: 56px;
-	margin: 100px;
-`
+export const CharacterInfoSectionBase = styled.div``
 
 export const Title = styled.div`
 	color: #8e8e93;

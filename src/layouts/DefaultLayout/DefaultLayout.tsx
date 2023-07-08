@@ -11,7 +11,7 @@ const DefaultLayout = ({ children }: IDefaultLayout) => {
 	return (
 		<DefaultLayoutBase>
 			<Navbar />
-			<GoBackButton />
+			{isDetailPage && <GoBackButton />}
 			<Container>{children}</Container>
 		</DefaultLayoutBase>
 	)
