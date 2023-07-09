@@ -1,4 +1,4 @@
-import Characters from './Characters'
+import Characters from './characters'
 
 import client from '../../apollo-client'
 import { GetCharactersDocument, GetCharactersQuery } from '../generated/graphql'
