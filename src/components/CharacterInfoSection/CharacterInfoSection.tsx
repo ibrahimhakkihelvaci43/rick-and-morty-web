@@ -22,7 +22,12 @@ const CharacterInfoSection = ({ title, items }: ICharacterInfoSection) => {
 			<Title>{title}</Title>
 			<Content>
 				{items.map((item, index) => (
-					<ListItem key={index} onClick={() => (item.href ? navigateToPage(item.href) : null)} isLink={!!item.href}>
+					<ListItem
+						data-testid="character-info-section-list-item"
+						key={index}
+						onClick={() => (item.href ? navigateToPage(item.href) : null)}
+						isLink={!!item.href}
+					>
 						<ListItemTitle>{item.title}</ListItemTitle>
 						<ListItemValue>{item.value}</ListItemValue>
 						{item.href && <StyledIcon />}

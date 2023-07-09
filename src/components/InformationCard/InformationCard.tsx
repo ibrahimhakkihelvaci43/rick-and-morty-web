@@ -3,7 +3,7 @@ import { IInformationCard } from './InformationCard.types'
 
 const InformationCard = ({ title, description, extraValue, onClick }: IInformationCard) => {
 	return (
-		<InformationCardBase onClick={onClick}> 
+		<InformationCardBase data-testid="information-card"  onClick={onClick}> 
 			<Title>{title}</Title>
 			<Description>{description}</Description>
 			{extraValue && <ExtraInfo>{extraValue}</ExtraInfo>}
