@@ -16,4 +16,9 @@ test('calls onSubmit func', async () => {
 	await userEvent.type(screen.getByPlaceholderText(/dimension/i), 'testvalue1')
 
 	await userEvent.click(screen.getByRole('button'))
+
+	expect(onSubmit).toHaveBeenCalledWith({
+		type: 'testvalue',
+		dimension: 'testvalue1',
+	})
 })

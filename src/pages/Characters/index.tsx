@@ -12,7 +12,7 @@ import { ICharacterFilterFormData } from '~/components/CharacterFilterForm/Chara
 
 interface IFilterData extends ICharacterFilterFormData {
 	name?: string
-}
+} 
 
 const Characters = ({ characters }: { characters: Character[] }) => {
 	const [charactersData, setCharactersData] = useState(characters)

@@ -24,3 +24,12 @@ export const Content = styled.div`
 export const StyledImage = styled(Image)`
 	margin: 0 auto;
 `
+
+
+
+export const Loading = styled.div`
+	width: 100%;
+	margin-top: 24px;
+	display: flex;
+	justify-content: center;
+`

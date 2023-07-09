@@ -6,23 +6,6 @@ import client from '../../../apollo-client'
 import { GetServerSideProps } from 'next/types'
 import formatDate from '~/utils/formatDate/formatDate'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-	const { id } = context.query
-
-	const { data } = await client.query<GetCharacterByIdQuery>({
-		query: GetCharacterByIdDocument,
-		variables: {
-			id: Number(id),
-		},
-	})
-
-	return {
-		props: {
-			character: data.character || [],
-		},
-	}
-}
-
 const CharacterDetail = ({ character }: { character: Character }) => {
 	const { name, gender, species, status, type, location, episode, image, origin } = character
 	return (
@@ -75,6 +58,23 @@ const CharacterDetail = ({ character }: { character: Character }) => {
 			</Content>
 		</CharacterDetailBase>
 	)
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { id } = context.query
+
+	const { data } = await client.query<GetCharacterByIdQuery>({
+		query: GetCharacterByIdDocument,
+		variables: {
+			id: Number(id),
+		},
+	})
+
+	return {
+		props: {
+			character: data.character || [],
+		},
+	}
 }
 
 export default CharacterDetail

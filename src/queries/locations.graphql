@@ -1,0 +1,12 @@
+query GetLocations($page: Int, $type: String, $dimension: String, $name: String) {
+	locations(page: $page, filter: { type: $type, dimension: $dimension, name: $name }) {
+		info {
+			count
+		}
+		results {
+			id
+			name
+			type
+		}
+	}
+}

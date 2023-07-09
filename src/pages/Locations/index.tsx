@@ -1,4 +1,4 @@
-import { LocationsBase, Content, StyledImage } from './Locations.style'
+import { LocationsBase, Content, StyledImage, Loading } from './Locations.style'
 import PageHeader from '~/components/PageHeader/PageHeader'
 import useScrollEnd from '~/utils/useScrollToEnd'
 import Modal from '~/components/Modal/Modal'
@@ -6,37 +6,71 @@ import { useState } from 'react'
 import InformationCard from '~/components/InformationCard/InformationCard'
 import LocationsFilterForm from '~/components/LocationsFilterForm/LocationsFilterForm'
 
-const Locations = () => {
+import client from '../../../apollo-client'
+import { GetLocationsDocument, GetLocationsQuery, Location } from '../../generated/graphql'
+import { GetServerSideProps } from 'next/types'
+import { useLazyQuery } from '@apollo/client'
+import { ILocationsFilterFormData } from '~/components/LocationsFilterForm/LocationsFilterForm.types'
+import MoonLoader from 'react-spinners/MoonLoader'
+
+interface IFilterData extends ILocationsFilterFormData {
+	name?: string
+}
+
+const Locations = ({ locations }: { locations: Location[] }) => {
+	const [locationsData, setLocationsData] = useState(locations)
+	const [getMoreLocation, { loading }] = useLazyQuery(GetLocationsDocument)
+	const [page, setPage] = useState(2)
+	const [filter, setFilter] = useState({} as IFilterData)
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
-	const items = [
-		{
-			title: 'Title',
-			description: 'Description',
-		},
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
+	const onFilter = async (values: ILocationsFilterFormData) => {
+		const filters = { ...filter, type: values.type, dimension: values.dimension }
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
+		setFilter(filters)
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
+		const { data } = await getMoreLocation({
+			variables: {
+				page: 1,
+				...filters,
+			},
+		})
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
-	]
+		setPage(2)
 
-	const handleScrollEnd = () => {
-		console.log('useScrollEnd')
+		if (data && data.locations) {
+			setLocationsData(data.locations?.results ?? [])
+		}
+
+		setIsFilterModalOpen(false)
+	}
+
+	const onFilterByName = async (name: string) => {
+		const filters = { ...filter, name }
+		setFilter({ ...filter, name })
+		const { data } = await getMoreLocation({
+			variables: {
+				page: 1,
+				...filters,
+			},
+		})
+
+		setPage(2)
+
+		if (data && data.locations) {
+			setLocationsData(data.locations.results ?? [])
+		}
+	}
+
+	const handleScrollEnd = async () => {
+		const { data } = await getMoreLocation({
+			variables: { page, ...filter },
+		})
+
+		if (data && data.locations) {
+			setLocationsData((prevLocations) => [...prevLocations, ...(data.locations.results ?? [])])
+			setPage((prevPage) => prevPage + 1)
+		}
 	}
 
 	useScrollEnd(handleScrollEnd)
@@ -45,41 +79,39 @@ const Locations = () => {
 		<LocationsBase>
 			<PageHeader
 				image={<StyledImage src="/images/Locations.png" width={174} height={136} alt="locations" />}
-				onChangeSearch={() => {}}
+				onChangeSearch={onFilterByName}
 				onClickAdvancedFilters={() => setIsFilterModalOpen(true)}
 			/>
 			<Content>
-				{items.map((item, index) => (
-					<InformationCard key={index} {...item} />
+				{locationsData.map((item, index) => (
+					<InformationCard key={index} title={item.name ?? ''} description={item.type ?? ''} />
 				))}
+				{loading && (
+					<Loading>
+						<MoonLoader size={30} />
+					</Loading>
+				)}
 			</Content>
 			<Modal title="Filtres" isOpen={isFilterModalOpen} onCloseModal={() => setIsFilterModalOpen(false)}>
-				<LocationsFilterForm
-					species={[
-						{
-							label: 'Human',
-							value: 'human',
-						},
-						{
-							label: 'Alien',
-							value: 'alien',
-						},
-					]}
-					dimensions={[
-						{
-							label: 'Dimension C-137',
-							value: 'Dimension C-137',
-						},
-						{
-							label: 'Post-Apocalyptic Dimension',
-							value: 'Post-Apocalyptic Dimension',
-						},
-					]}
-					onSubmit={() => {}}
-				/>
+				<LocationsFilterForm values={filter} onSubmit={onFilter} />
 			</Modal>
 		</LocationsBase>
 	)
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { data } = await client.query<GetLocationsQuery>({
+		query: GetLocationsDocument,
+		variables: {
+			page: 1,
+		},
+	})
+
+	return {
+		props: {
+			locations: data.locations?.results || [],
+		},
+	}
 }
 
 export default Locations

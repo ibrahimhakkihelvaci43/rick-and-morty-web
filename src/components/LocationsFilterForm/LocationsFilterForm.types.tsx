@@ -4,6 +4,6 @@ export interface ILocationsFilterForm {
 }
 
 export interface ILocationsFilterFormData {
-	species?: string
+	type?: string
 	dimension?: string
 }

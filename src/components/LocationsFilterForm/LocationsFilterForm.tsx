@@ -7,7 +7,7 @@ import Input from '../Input/Input'
 const LocationsFilterForm = ({ values, onSubmit }: ILocationsFilterForm) => {
 	const [formData, setFormData] = useState<ILocationsFilterFormData>(
 		values || {
-			species: '',
+			type: '',
 			dimension: '',
 		},
 	)
@@ -26,11 +26,11 @@ const LocationsFilterForm = ({ values, onSubmit }: ILocationsFilterForm) => {
 	return (
 		<LocationsFilterFormBase>
 			<Form>
-				<Input defaultValue={values?.species} placeholder="Species" onChange={(value) => onChange('species', value)} />
+				<Input defaultValue={values?.type} placeholder="Species" onChange={(value) => onChange('type', value)} />
 				<Input
-					defaultValue={values?.species}
+					defaultValue={values?.dimension}
 					placeholder="Dimension"
-					onChange={(value) => onChange('species', value)}
+					onChange={(value) => onChange('dimension', value)}
 				/>
 			</Form>
 			<Button label="APPLY" onClick={onSubmitForm} />
