@@ -10,6 +10,7 @@ import MoonLoader from 'react-spinners/MoonLoader'
 import { ICharacterFilterFormData } from '~/components/CharacterFilterForm/CharacterFilterForm.types'
 // @ts-ignore
 import { CharactersBase, StyledImage, Content, Loading } from './characters.style'
+import { filterByProps, scrollEnd, filterByName } from '~/utils/apiHelpers/apiHelpers'
 
 interface IFilterData extends ICharacterFilterFormData {
 	name?: string
@@ -23,53 +24,40 @@ const Characters = ({ characters }: { characters: Character[] }) => {
 	const [filter, setFilter] = useState({} as IFilterData)
 
 	const onFilter = async (values: ICharacterFilterFormData) => {
-		const filters = { ...filter, species: values.species, gender: values.gender, status: values.status }
-
-		setFilter(filters)
-
-		const { data } = await getMoreCharacter({
-			variables: {
-				page: 1,
-				...filters,
-			},
+		filterByProps({
+			newFilters: { species: values.species, gender: values.gender, status: values.status },
+			filter,
+			setFilter,
+			queryFunction: getMoreCharacter,
+			setPage,
+			setData: setCharactersData,
+			dataTitle: 'characters',
 		})
-
-		setPage(2)
-
-		if (data && data.characters) {
-			setCharactersData(data.characters.results ?? [])
-		}
 
 		setIsFilterModalOpen(false)
 	}
 
 	const onFilterByName = async (name: string) => {
-		const filters = { ...filter, name }
-
-		setFilter({ ...filter, name })
-		const { data } = await getMoreCharacter({
-			variables: {
-				page: 1,
-				...filters,
-			},
+		filterByName({
+			filter,
+			name,
+			queryFunction: getMoreCharacter,
+			setFilter,
+			setData: setCharactersData,
+			setPage,
+			dataTitle: 'characters',
 		})
-
-		setPage(2)
-
-		if (data && data.characters) {
-			setCharactersData(data.characters.results ?? [])
-		}
 	}
 
 	const handleScrollEnd = async () => {
-		const { data } = await getMoreCharacter({
-			variables: { page, ...filter },
+		scrollEnd({
+			queryFunction: getMoreCharacter,
+			page,
+			filter,
+			setData: setCharactersData,
+			setPage,
+			dataTitle: 'characters',
 		})
-
-		if (data && data.characters) {
-			setCharactersData((prevCharacters) => [...prevCharacters, ...(data.characters.results ?? [])])
-			setPage((prevPage) => prevPage + 1)
-		}
 	}
 
 	useScrollEnd(handleScrollEnd)

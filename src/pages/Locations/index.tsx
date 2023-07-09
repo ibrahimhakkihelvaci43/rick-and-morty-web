@@ -13,7 +13,7 @@ import { useLazyQuery } from '@apollo/client'
 import { ILocationsFilterFormData } from '~/components/LocationsFilterForm/LocationsFilterForm.types'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { useRouter } from 'next/router'
-
+import { filterByProps, scrollEnd, filterByName } from '~/utils/apiHelpers/apiHelpers'
 interface IFilterData extends ILocationsFilterFormData {
 	name?: string
 }
@@ -27,57 +27,45 @@ const Locations = ({ locations }: { locations: Location[] }) => {
 	const [filter, setFilter] = useState({} as IFilterData)
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
 
+	const navigateToDetail = (id: string) => {
+		router.push(`/location-detail/${id}`)
+	}
+
 	const onFilter = async (values: ILocationsFilterFormData) => {
-		const filters = { ...filter, type: values.type, dimension: values.dimension }
-
-		setFilter(filters)
-
-		const { data } = await getMoreLocation({
-			variables: {
-				page: 1,
-				...filters,
-			},
+		filterByProps({
+			newFilters: { type: values.type, dimension: values.dimension },
+			filter,
+			setFilter,
+			queryFunction: getMoreLocation,
+			setPage,
+			setData: setLocationsData,
+			dataTitle: 'locations',
 		})
-
-		setPage(2)
-
-		if (data && data.locations) {
-			setLocationsData(data.locations?.results ?? [])
-		}
 
 		setIsFilterModalOpen(false)
 	}
 
 	const onFilterByName = async (name: string) => {
-		const filters = { ...filter, name }
-		setFilter({ ...filter, name })
-		const { data } = await getMoreLocation({
-			variables: {
-				page: 1,
-				...filters,
-			},
+		filterByName({
+			filter,
+			name,
+			queryFunction: getMoreLocation,
+			setFilter,
+			setData: setLocationsData,
+			setPage,
+			dataTitle: 'locations',
 		})
-
-		setPage(2)
-
-		if (data && data.locations) {
-			setLocationsData(data.locations.results ?? [])
-		}
-	}
-
-	const navigateToDetail = (id: string) => {
-		router.push(`/location-detail/${id}`)
 	}
 
 	const handleScrollEnd = async () => {
-		const { data } = await getMoreLocation({
-			variables: { page, ...filter },
+		scrollEnd({
+			queryFunction: getMoreLocation,
+			page,
+			filter,
+			setData: setLocationsData,
+			setPage,
+			dataTitle: 'locations',
 		})
-
-		if (data && data.locations) {
-			setLocationsData((prevLocations) => [...prevLocations, ...(data.locations.results ?? [])])
-			setPage((prevPage) => prevPage + 1)
-		}
 	}
 
 	useScrollEnd(handleScrollEnd)
@@ -91,7 +79,12 @@ const Locations = ({ locations }: { locations: Location[] }) => {
 			/>
 			<Content>
 				{locationsData.map((item, index) => (
-					<InformationCard key={index} title={item.name ?? ''} description={item.type ?? ''} onClick={() => navigateToDetail(item.id ?? '')} />
+					<InformationCard
+						key={index}
+						title={item.name ?? ''}
+						description={item.type ?? ''}
+						onClick={() => navigateToDetail(item.id ?? '')}
+					/>
 				))}
 				{loading && (
 					<Loading>

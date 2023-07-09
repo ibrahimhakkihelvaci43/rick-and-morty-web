@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { useRouter } from 'next/router'
+import { scrollEnd, filterByName } from '~/utils/apiHelpers/apiHelpers'
 
 const Episodes = ({ episodes }: { episodes: Episode[] }) => {
 	const router = useRouter()
@@ -21,21 +22,15 @@ const Episodes = ({ episodes }: { episodes: Episode[] }) => {
 	})
 
 	const onFilterByName = async (name: string) => {
-		const filters = { ...filter, name }
-
-		setFilter({ ...filter, name })
-		const { data } = await getMoreEpisode({
-			variables: {
-				page: 1,
-				...filters,
-			},
+		filterByName({
+			filter,
+			name,
+			queryFunction: getMoreEpisode,
+			setFilter,
+			setData: setEpisodesData,
+			setPage,
+			dataTitle: 'episodes',
 		})
-
-		setPage(2)
-
-		if (data && data.episodes) {
-			setEpisodesData(data.episodes.results ?? [])
-		}
 	}
 
 	const navigateToDetail = (id: string) => {
@@ -43,14 +38,14 @@ const Episodes = ({ episodes }: { episodes: Episode[] }) => {
 	}
 
 	const handleScrollEnd = async () => {
-		const { data } = await getMoreEpisode({
-			variables: { page, ...filter },
+		scrollEnd({
+			queryFunction: getMoreEpisode,
+			page,
+			filter,
+			setData: setEpisodesData,
+			setPage,
+			dataTitle: 'episodes',
 		})
-
-		if (data && data.episodes) {
-			setEpisodesData((prevEpisodes) => [...prevEpisodes, ...(data.episodes.results ?? [])])
-			setPage((prevPage) => prevPage + 1)
-		}
 	}
 
 	useScrollEnd(handleScrollEnd)
