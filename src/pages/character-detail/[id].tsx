@@ -1,55 +1,78 @@
 import CharacterInfoSection from '~/components/CharacterInfoSection/CharacterInfoSection'
 import { CharacterDetailBase, Content } from './character-detail.style'
 import CharacterProfile from '~/components/CharacterProfile/CharacterProfile'
+import { Character, GetCharacterByIdDocument, GetCharacterByIdQuery } from '~/generated/graphql'
+import client from '../../../apollo-client'
+import { GetServerSideProps } from 'next/types'
+import formatDate from '~/utils/formatDate/formatDate'
 
-const CharacterDetail = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { id } = context.query
+
+	const { data } = await client.query<GetCharacterByIdQuery>({
+		query: GetCharacterByIdDocument,
+		variables: {
+			id: Number(id),
+		},
+	})
+
+	return {
+		props: {
+			character: data.character || [],
+		},
+	}
+}
+
+const CharacterDetail = ({ character }: { character: Character }) => {
+	const { name, gender, species, created, status, type, location, episode } = character
+	console.log(character)
 	return (
 		<CharacterDetailBase>
-			<CharacterProfile name="Rick Sanchez" imageUrl="/images/RickSanchez.png" />
+			<CharacterProfile name={character.name ?? ''} imageUrl={character.image ?? ''} />
 			<Content>
 				<CharacterInfoSection
 					title="Character Info"
 					items={[
 						{
-							title: 'Name',
-							value: 'John Doe',
+							title: 'Gender',
+							value: gender ?? '',
 						},
 						{
-							title: 'Gender',
-							value: 'Male',
-							extraValue: 'December 2, 2013',
+							title: 'Status',
+							value: status ?? '',
 						},
 						{
 							title: 'Specie',
-							value: 'Human',
-							href: '/',
+							value: species ?? '',
+						},
+						{
+							title: 'Origin',
+							value: character.origin?.name ?? '',
+						},
+						{
+							title: 'Type',
+							value: type ?? '',
+						},
+						{
+							title: 'Location',
+							value: location?.name ?? '',
 						},
 					]}
 				/>
 
-				<CharacterInfoSection
-					title="Episodes"
-					items={[
-						{
-							title: 'Name',
-							value: 'John Doe',
-							extraValue: 'December 2, 2013',
-							href: '/',
-						},
-						{
-							title: 'Gender',
-							value: 'Male',
-							extraValue: 'December 2, 2013',
-							href: '/',
-						},
-						{
-							title: 'Specie',
-							value: 'Human',
-							href: '/',
-							extraValue: 'December 2, 2013',
-						},
-					]}
-				/>
+				{episode && (
+					<CharacterInfoSection
+						title="Episodes"
+						items={
+							episode?.map((item) => ({
+								title: item?.episode ?? '',
+								value: item?.name ?? '',
+								extraValue: formatDate(item?.air_date ?? ''),
+								href: '/',
+							})) ?? []
+						}
+					/>
+				)}
 			</Content>
 		</CharacterDetailBase>
 	)

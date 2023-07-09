@@ -2,9 +2,9 @@ import Characters from './Characters'
 
 import client from '../../apollo-client'
 import { GetCharactersDocument, GetCharactersQuery } from '../generated/graphql'
-export const getServerSideProps = async (): Promise<{
-	props: any
-}> => {
+import { GetServerSideProps } from 'next/types'
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { data } = await client.query<GetCharactersQuery>({
 		query: GetCharactersDocument,
 		variables: {

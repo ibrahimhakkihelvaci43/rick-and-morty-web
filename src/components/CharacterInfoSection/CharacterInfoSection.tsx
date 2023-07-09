@@ -26,7 +26,7 @@ const CharacterInfoSection = ({ title, items }: ICharacterInfoSection) => {
 						<ListItemTitle>{item.title}</ListItemTitle>
 						<ListItemValue>{item.value}</ListItemValue>
 						{item.href && <StyledIcon />}
-						{item.extraValue && <ExtraValue>December 2, 2013</ExtraValue>}
+						{item.extraValue && <ExtraValue>{item.extraValue}</ExtraValue>}
 					</ListItem>
 				))}
 			</Content>
