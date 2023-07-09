@@ -1,48 +1,74 @@
-import { CharactersBase, Content, StyledImage } from './Characters.style'
+import { CharactersBase, Content, Loading, StyledImage } from './Characters.style'
 import PageHeader from '~/components/PageHeader/PageHeader'
 import CharacterCard from '~/components/CharacterCard/CharacterCard'
 import useScrollEnd from '~/utils/useScrollToEnd'
 import Modal from '~/components/Modal/Modal'
 import CharacterFilterForm from '~/components/CharacterFilterForm/CharacterFilterForm'
 import { useState } from 'react'
+import { Character, GetCharactersDocument } from '~/generated/graphql'
+import { useLazyQuery } from '@apollo/client'
+import MoonLoader from 'react-spinners/MoonLoader'
+import { ICharacterFilterFormData } from '~/components/CharacterFilterForm/CharacterFilterForm.types'
 
-const Characters = () => {
+interface IFilterData extends ICharacterFilterFormData {
+	name?: string
+}
+
+const Characters = ({ characters }: { characters: Character[] }) => {
+	const [charactersData, setCharactersData] = useState(characters)
+	const [getMoreCharacter, { loading }] = useLazyQuery(GetCharactersDocument)
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
-	const items = [
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-	]
+	const [page, setPage] = useState(2)
+	const [filter, setFilter] = useState({} as IFilterData)
 
-	const handleScrollEnd = () => {
-		console.log('useScrollEnd')
+	const onFilter = async (values: ICharacterFilterFormData) => {
+		const filters = { ...filter, species: values.species, gender: values.gender, status: values.status }
+
+		setFilter(filters)
+
+		const { data } = await getMoreCharacter({
+			variables: {
+				page: 1,
+				...filters,
+			},
+		})
+
+		setPage(2)
+
+		if (data && data.characters) {
+			setCharactersData(data.characters.results ?? [])
+		}
+
+		setIsFilterModalOpen(false)
+	}
+
+	const onFilterByName = async (name: string) => {
+		const filters = { ...filter, name }
+
+		setFilter({ ...filter, name })
+		const { data } = await getMoreCharacter({
+			variables: {
+				page: 1,
+				...filters,
+			},
+		})
+
+		setPage(2)
+
+		if (data && data.characters) {
+			setCharactersData(data.characters.results ?? [])
+		}
+	}
+
+	const handleScrollEnd = async () => {
+		const { data } = await getMoreCharacter({
+			variables: { page, ...filter },
+		})
+
+		if (data && data.characters) {
+			setCharactersData((prevCharacters) => [...prevCharacters, ...(data.characters.results ?? [])])
+			setPage((prevPage) => prevPage + 1)
+		}
 	}
 
 	useScrollEnd(handleScrollEnd)
@@ -51,27 +77,33 @@ const Characters = () => {
 		<CharactersBase>
 			<PageHeader
 				image={<StyledImage src="/images/RickAndMortyLogo.png" width={312} height={104} alt="rick-and-morty-logo" />}
-				onChangeSearch={() => {}}
+				onChangeSearch={onFilterByName}
 				onClickAdvancedFilters={() => setIsFilterModalOpen(true)}
 			/>
 			<Content>
-				{items.map((item, index) => (
-					<CharacterCard key={index} {...item} />
+				{charactersData.map((character, index) => (
+					<CharacterCard
+						key={index}
+						title={character.name ?? ''}
+						imageUrl={character.image ?? ''}
+						description={character.species ?? ''}
+					/>
 				))}
+				{loading && (
+					<Loading>
+						<MoonLoader size={30} />
+					</Loading>
+				)}
 			</Content>
+
 			<Modal title="Filtres" isOpen={isFilterModalOpen} onCloseModal={() => setIsFilterModalOpen(false)}>
 				<CharacterFilterForm
-					species={[
-						{
-							label: 'Human',
-							value: 'human',
-						},
-						{
-							label: 'Alien',
-							value: 'alien',
-						},
-					]}
+					values={filter}
 					genders={[
+						{
+							label: 'No Filter',
+							value: '',
+						},
 						{
 							label: 'Male',
 							value: 'male',
@@ -83,6 +115,10 @@ const Characters = () => {
 					]}
 					situations={[
 						{
+							label: 'No Filter',
+							value: '',
+						},
+						{
 							label: 'Alive',
 							value: 'alive',
 						},
@@ -90,8 +126,12 @@ const Characters = () => {
 							label: 'Dead',
 							value: 'dead',
 						},
+						{
+							label: 'Unknown',
+							value: 'unknown',
+						},
 					]}
-					onSubmit={() => {}}
+					onSubmit={onFilter}
 				/>
 			</Modal>
 		</CharactersBase>

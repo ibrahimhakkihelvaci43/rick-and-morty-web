@@ -8,21 +8,12 @@ test('renders CharacterFilterForm', () => {
 	render(<CharacterFilterForm {...props} />)
 })
 
-test('shows error messages', async () => {
-	render(<CharacterFilterForm {...props} />)
-	await userEvent.click(screen.getByRole('button'))
-
-	expect(screen.getByText('Please select a type.')).toBeInTheDocument()
-	expect(screen.getByText('Please select a gender.')).toBeInTheDocument()
-	expect(screen.getByText('Please select a status.')).toBeInTheDocument()
-})
-
 test('calls onSubmit func', async () => {
 	const onSubmit = jest.fn()
 	render(<CharacterFilterForm {...props} onSubmit={onSubmit} />)
 
-	await userEvent.click(screen.getByText(/species/i))
-	await userEvent.click(screen.getByText(props.species[0].label))
+	const input = screen.getByRole('textbox')
+	await userEvent.type(input, 'testvalue')
 
 	await userEvent.click(screen.getByText(/gender/i))
 	await userEvent.click(screen.getByText(props.genders[0].label))
@@ -33,8 +24,9 @@ test('calls onSubmit func', async () => {
 	await userEvent.click(screen.getByRole('button'))
 
 	expect(onSubmit).toHaveBeenCalledWith({
-		type: props.species[0],
-		gender: props.genders[0],
-		status: props.situations[0],
+		species: 'testvalue',
+		gender: props.genders[0].value,
+		status: props.situations[0].value,
 	})
 })
+ 

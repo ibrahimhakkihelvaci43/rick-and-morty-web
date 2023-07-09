@@ -1,58 +1,36 @@
-import { IErrorMessages, validateForm } from '~/utils/validateForm'
 import Button from '../Button/Button'
-import Select from '../Select/Select'
-import { ISelectItem } from '../Select/Select.types'
 import { LocationsFilterFormBase, Form } from './LocationsFilterForm.style'
-import { ILocationsFilterForm, IFormData } from './LocationsFilterForm.types'
+import { ILocationsFilterForm, ILocationsFilterFormData } from './LocationsFilterForm.types'
 import { useState } from 'react'
+import Input from '../Input/Input'
 
-const LocationsFilterForm = ({ species, dimensions, onSubmit }: ILocationsFilterForm) => {
-	const [formData, setFormData] = useState<IFormData>({
-		type: null,
-		dimension: null,
-	})
+const LocationsFilterForm = ({ values, onSubmit }: ILocationsFilterForm) => {
+	const [formData, setFormData] = useState<ILocationsFilterFormData>(
+		values || {
+			species: '',
+			dimension: '',
+		},
+	)
 
-	const [errorMessages, setErrorMessages] = useState<IErrorMessages>({
-		type: null,
-		dimension: null,
-	})
-
-	const onChange = (name: string, value: ISelectItem) => {
+	const onChange = (name: string, value: string) => {
 		setFormData({
 			...formData,
 			[name]: value,
 		})
-
-		setErrorMessages({
-			...errorMessages,
-			[name]: null,
-		})
 	}
 
 	const onSubmitForm = () => {
-		const { hasError, errorMessages } = validateForm(formData)
-
-		if (!hasError) {
-			onSubmit(formData)
-		} else {
-			setErrorMessages(errorMessages)
-		}
+		onSubmit(formData)
 	}
 
 	return (
 		<LocationsFilterFormBase>
 			<Form>
-				<Select
-					placeholder="Species"
-					items={species}
-					errorMessage={errorMessages.type}
-					onClick={(value) => onChange('type', value)}
-				/>
-				<Select
+				<Input defaultValue={values?.species} placeholder="Species" onChange={(value) => onChange('species', value)} />
+				<Input
+					defaultValue={values?.species}
 					placeholder="Dimension"
-					items={dimensions}
-					errorMessage={errorMessages.dimension}
-					onClick={(value) => onChange('dimension', value)}
+					onChange={(value) => onChange('species', value)}
 				/>
 			</Form>
 			<Button label="APPLY" onClick={onSubmitForm} />

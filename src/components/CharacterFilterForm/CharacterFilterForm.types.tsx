@@ -1,14 +1,15 @@
 import { ISelect, ISelectItem } from '../Select/Select.types'
 
 export interface ICharacterFilterForm {
-	species: { label: string; value: string }[]
+	defaultFormData?: ICharacterFilterFormData
 	genders: { label: string; value: string }[]
 	situations: { label: string; value: string }[]
-	onSubmit: (formData: IFormData) => void
+	values?: ICharacterFilterFormData
+	onSubmit: (formData: ICharacterFilterFormData) => void
 }
 
-export interface IFormData {
-	type: ISelectItem | null
-	gender: ISelectItem | null
-	status: ISelectItem | null
+export interface ICharacterFilterFormData {
+	species?: string
+	gender: string | null
+	status: string | null
 }

@@ -1,18 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SelectBase, Icon, Content, Label, List, ListItem, ErrorMessage } from './Select.style'
 import { ISelectItem, ISelect } from './Select.types'
 import ArrowDown from '~/assets/icons/ArrowDown'
 import ArrowUp from '~/assets/icons/ArrowUp'
 import OutsideClickHandler from 'react-outside-click-handler'
 
-const Select = ({ placeholder, items, errorMessage, onClick }: ISelect) => {
+const Select = ({ value, placeholder, items, errorMessage, onClick }: ISelect) => {
 	const [isActive, setIsActive] = useState(false)
-	const [selectedItem, setSelectedItem] = useState<ISelectItem | null>(null)
+	const [selectedItem, setSelectedItem] = useState<string | null>(value || null)
 
 	const onClickItem = (item: ISelectItem) => {
 		setIsActive(false)
-		onClick(item)
-		setSelectedItem(item)
+		onClick(item.value)
+		setSelectedItem(item.value)
 	}
 
 	return (
@@ -22,7 +22,7 @@ const Select = ({ placeholder, items, errorMessage, onClick }: ISelect) => {
 			}}
 		>
 			<SelectBase role="select" onClick={() => setIsActive(!isActive)}>
-				<Label>{selectedItem ? selectedItem.label : placeholder}</Label>
+				<Label>{selectedItem ? items.find((item) => item.value === selectedItem)?.label : placeholder}</Label>
 				<Icon>{isActive ? <ArrowUp /> : <ArrowDown />}</Icon>
 				{isActive && (
 					<Content>

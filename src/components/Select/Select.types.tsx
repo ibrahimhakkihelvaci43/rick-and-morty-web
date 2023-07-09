@@ -1,8 +1,9 @@
 export interface ISelect {
+	value?: string | null
 	placeholder: string
 	items: ISelectItem[]
 	errorMessage?: string | null
-	onClick: (value: ISelectItem) => void
+	onClick: (value: string) => void
 }
 
 export interface ISelectItem {

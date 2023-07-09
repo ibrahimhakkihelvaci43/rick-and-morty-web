@@ -2,6 +2,7 @@ import CharacterInfoSection from './CharacterInfoSection'
 import { render, screen } from '@testing-library/react'
 import props from './CharacterInfoSection.testprops'
 import mockRouter from 'next-router-mock'
+import userEvent from '@testing-library/user-event'
 
 jest.mock('next/router', () => require('next-router-mock'))
 
@@ -24,12 +25,12 @@ test('renders items correctly', () => {
 	}
 })
 
-test('navigates to href', () => {
+test('navigates to href', async() => {
 	render(<CharacterInfoSection {...props} />)
 
 	for (const item of props.items) {
 		if (item.href) {
-			screen.getByText(item.title).click()
+			await userEvent.click(screen.getByText(item.title))
 			expect(mockRouter).toMatchObject({
 				pathname: item.href,
 			})

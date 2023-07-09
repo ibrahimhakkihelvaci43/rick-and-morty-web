@@ -1,65 +1,45 @@
-import { IErrorMessages, validateForm } from '~/utils/validateForm'
 import Button from '../Button/Button'
 import Select from '../Select/Select'
 import { ISelectItem } from '../Select/Select.types'
 import { CharacterFilterFormBase, Form } from './CharacterFilterForm.style'
-import { ICharacterFilterForm, IFormData } from './CharacterFilterForm.types'
-import { useEffect, useState } from 'react'
+import { ICharacterFilterForm, ICharacterFilterFormData } from './CharacterFilterForm.types'
+import { useState } from 'react'
+import Input from '../Input/Input'
 
-const CharacterFilterForm = ({ species, genders, situations, onSubmit }: ICharacterFilterForm) => {
-	const [formData, setFormData] = useState<IFormData>({
-		type: null,
-		gender: null,
-		status: null,
-	})
+const CharacterFilterForm = ({ values, genders, situations, onSubmit }: ICharacterFilterForm) => {
+	const [formData, setFormData] = useState<ICharacterFilterFormData>(
+		values || {
+			species: '',
+			gender: null,
+			status: null,
+		},
+	)
 
-	const [errorMessages, setErrorMessages] = useState<IErrorMessages>({
-		type: null,
-		gender: null,
-		status: null,
-	})
-
-	const onChange = (name: string, value: ISelectItem) => {
+	const onChange = (name: string, value: ISelectItem | string) => {
 		setFormData({
 			...formData,
 			[name]: value,
 		})
-
-		setErrorMessages({
-			...errorMessages,
-			[name]: null,
-		})
 	}
 
 	const onSubmitForm = () => {
-		const { hasError, errorMessages } = validateForm(formData)
-
-		if (!hasError) {
-			onSubmit(formData)
-		} else {
-			setErrorMessages(errorMessages)
-		}
+		onSubmit(formData)
 	}
 
 	return (
 		<CharacterFilterFormBase>
 			<Form>
+				<Input defaultValue={values?.species} placeholder="Species" onChange={(value) => onChange('species', value)} />
 				<Select
-					placeholder="Species"
-					items={species}
-					errorMessage={errorMessages.type}
-					onClick={(value) => onChange('type', value)}
-				/>
-				<Select
+					value={values?.gender}
 					placeholder="Gender"
 					items={genders}
-					errorMessage={errorMessages.gender}
 					onClick={(value) => onChange('gender', value)}
 				/>
 				<Select
+					value={values?.status}
 					placeholder="Status"
 					items={situations}
-					errorMessage={errorMessages.status}
 					onClick={(value) => onChange('status', value)}
 				/>
 			</Form>

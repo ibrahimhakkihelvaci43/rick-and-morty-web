@@ -21,7 +21,7 @@ test('calls function when list item is clicked', async () => {
 	await userEvent.click(screen.getByRole('select'))
 	await userEvent.click(screen.getAllByRole('listitem')[0])
 
-	expect(onClick).toHaveBeenCalledWith(props.items[0])
+	expect(onClick).toHaveBeenCalledWith(props.items[0].value)
 })
 
 test('when click on element, placeholder changes', async () => {

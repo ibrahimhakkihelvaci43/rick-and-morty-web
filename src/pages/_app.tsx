@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app'
 import DefaultLayout from '~/layouts/DefaultLayout/DefaultLayout'
 import '~/styles/globals.css'
 import { ApolloProvider } from '@apollo/client'
-import client from '../../apolloClient'
+import client from '../../apollo-client'
 
 const App = ({ Component, pageProps }: AppProps) => (
 	<ApolloProvider client={client}>

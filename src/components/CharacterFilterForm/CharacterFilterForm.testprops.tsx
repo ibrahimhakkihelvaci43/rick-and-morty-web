@@ -21,16 +21,9 @@ const CharacterFilterFormProps: ICharacterFilterForm = {
 			value: 'dead',
 		},
 	],
-	species: [
-		{
-			label: 'Human',
-			value: 'human',
-		},
-		{
-			label: 'Alien',
-			value: 'alien',
-		},
-	],
-	onSubmit: (data) => {console.log(data)},
+
+	onSubmit: (data) => {
+		console.log(data)
+	},
 }
 export default CharacterFilterFormProps

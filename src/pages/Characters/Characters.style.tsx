@@ -7,6 +7,7 @@ export const CharactersBase = styled.div`
 
 export const Content = styled.div`
 	margin-top: 32px;
+	padding-bottom: 100px;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
@@ -23,4 +24,12 @@ export const Content = styled.div`
 
 export const StyledImage = styled(Image)`
 	width: 100%;
+`
+
+
+export const Loading = styled.div`
+	width: 100%;
+	margin-top: 24px;
+	display: flex;
+	justify-content: center;
 `
