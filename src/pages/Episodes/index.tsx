@@ -1,38 +1,50 @@
-import { EpisodesBase, Content, StyledImage } from './Episodes.style'
+import { EpisodesBase, Content, StyledImage, Loading } from './Episodes.style'
 import PageHeader from '~/components/PageHeader/PageHeader'
 import useScrollEnd from '~/utils/useScrollToEnd'
 import InformationCard from '~/components/InformationCard/InformationCard'
+import { GetServerSideProps } from 'next/types'
+import { Episode, GetEpisodesDocument, GetEpisodesQuery } from '~/generated/graphql'
+import client from '../../../apollo-client'
+import formatDate from '~/utils/formatDate/formatDate'
+import { useState } from 'react'
+import { useLazyQuery } from '@apollo/client'
+import MoonLoader from 'react-spinners/MoonLoader'
 
-const Episodes = () => {
-	const items = [
-		{
-			title: 'Title',
-			description: 'Description',
-		},
+const Episodes = ({ episodes }: { episodes: Episode[] }) => {
+	const [episodesData, setEpisodesData] = useState(episodes)
+	const [getMoreEpisode, { loading }] = useLazyQuery(GetEpisodesDocument)
+	const [page, setPage] = useState(2)
+	const [filter, setFilter] = useState({
+		name: '',
+	})
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
+	const onFilterByName = async (name: string) => {
+		const filters = { ...filter, name }
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
+		setFilter({ ...filter, name })
+		const { data } = await getMoreEpisode({
+			variables: {
+				page: 1,
+				...filters,
+			},
+		})
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
+		setPage(2)
 
-		{
-			title: 'Title',
-			description: 'Description',
-		},
-	]
+		if (data && data.episodes) {
+			setEpisodesData(data.episodes.results ?? [])
+		}
+	}
 
-	const handleScrollEnd = () => {
-		console.log('useScrollEnd')
+	const handleScrollEnd = async () => {
+		const { data } = await getMoreEpisode({
+			variables: { page, ...filter },
+		})
+
+		if (data && data.episodes) {
+			setEpisodesData((prevEpisodes) => [...prevEpisodes, ...(data.episodes.results ?? [])])
+			setPage((prevPage) => prevPage + 1)
+		}
 	}
 
 	useScrollEnd(handleScrollEnd)
@@ -41,15 +53,40 @@ const Episodes = () => {
 		<EpisodesBase>
 			<PageHeader
 				image={<StyledImage src="/images/Episodes.png" width={174} height={136} alt="episodes" />}
-				onChangeSearch={() => {}}
+				onChangeSearch={onFilterByName}
 			/>
 			<Content>
-				{items.map((item, index) => (
-					<InformationCard key={index} {...item} />
+				{episodesData.map((item, index) => (
+					<InformationCard
+						key={index}
+						title={item.name ?? ''}
+						description={formatDate(item.air_date ?? '')}
+						extraValue={item.episode ?? ''}
+					/>
 				))}
+				{loading && (
+					<Loading>
+						<MoonLoader size={30} />
+					</Loading>
+				)}
 			</Content>
 		</EpisodesBase>
 	)
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	const { data } = await client.query<GetEpisodesQuery>({
+		query: GetEpisodesDocument,
+		variables: {
+			page: 1,
+		},
+	})
+
+	return {
+		props: {
+			episodes: data.episodes?.results || [],
+		},
+	}
 }
 
 export default Episodes

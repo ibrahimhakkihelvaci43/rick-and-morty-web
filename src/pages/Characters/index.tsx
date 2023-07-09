@@ -5,14 +5,14 @@ import useScrollEnd from '~/utils/useScrollToEnd'
 import Modal from '~/components/Modal/Modal'
 import CharacterFilterForm from '~/components/CharacterFilterForm/CharacterFilterForm'
 import { useState } from 'react'
-import { Character, GetCharactersDocument } from '~/generated/graphql'
+import { Character, GetCharactersDocument} from '~/generated/graphql'
 import { useLazyQuery } from '@apollo/client'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { ICharacterFilterFormData } from '~/components/CharacterFilterForm/CharacterFilterForm.types'
 
 interface IFilterData extends ICharacterFilterFormData {
 	name?: string
-} 
+}
 
 const Characters = ({ characters }: { characters: Character[] }) => {
 	const [charactersData, setCharactersData] = useState(characters)

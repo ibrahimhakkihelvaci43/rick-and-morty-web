@@ -1,0 +1,13 @@
+query GetEpisodes($page: Int, $name: String) {
+	episodes(page: $page, filter: { name: $name }) {
+		info {
+			count
+		}
+		results {
+			id
+			name
+			air_date
+			episode
+		}
+	}
+}
