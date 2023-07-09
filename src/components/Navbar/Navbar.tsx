@@ -13,11 +13,11 @@ const Navbar = () => {
 		},
 		{
 			label: 'Locations',
-			href: '/Locations',
+			href: '/locations',
 		},
 		{
 			label: 'Episodes',
-			href: '/Episodes',
+			href: '/episodes',
 		},
 	]
 
