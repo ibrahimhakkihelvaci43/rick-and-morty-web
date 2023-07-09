@@ -6,9 +6,6 @@ export const LocationDetailBase = styled.div`
 
 export const Content = styled.div`
 	width: 100%;
-	margin-top: 32px;
-	display: flex;
-	flex-direction: column;
 	margin-top: 29px;
 `
 
@@ -18,4 +15,10 @@ export const SectionTitle = styled.div`
 	font-weight: 500;
 	line-height: 30px;
 	margin-bottom: 16px;
+`
+
+export const Residents = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
 `

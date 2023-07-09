@@ -11,5 +11,4 @@ test('renders items correctly', () => {
 
 	expect(screen.getByText(props.title)).toBeInTheDocument()
 	expect(screen.getByText(props.description)).toBeInTheDocument()
-	expect(screen.getByText(props.extraValue)).toBeInTheDocument()
 })

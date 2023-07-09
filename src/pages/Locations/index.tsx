@@ -12,12 +12,15 @@ import { GetServerSideProps } from 'next/types'
 import { useLazyQuery } from '@apollo/client'
 import { ILocationsFilterFormData } from '~/components/LocationsFilterForm/LocationsFilterForm.types'
 import MoonLoader from 'react-spinners/MoonLoader'
+import { useRouter } from 'next/router'
 
 interface IFilterData extends ILocationsFilterFormData {
 	name?: string
 }
 
 const Locations = ({ locations }: { locations: Location[] }) => {
+	const router = useRouter()
+
 	const [locationsData, setLocationsData] = useState(locations)
 	const [getMoreLocation, { loading }] = useLazyQuery(GetLocationsDocument)
 	const [page, setPage] = useState(2)
@@ -62,6 +65,10 @@ const Locations = ({ locations }: { locations: Location[] }) => {
 		}
 	}
 
+	const navigateToDetail = (id: string) => {
+		router.push(`/location-detail/${id}`)
+	}
+
 	const handleScrollEnd = async () => {
 		const { data } = await getMoreLocation({
 			variables: { page, ...filter },
@@ -84,7 +91,7 @@ const Locations = ({ locations }: { locations: Location[] }) => {
 			/>
 			<Content>
 				{locationsData.map((item, index) => (
-					<InformationCard key={index} title={item.name ?? ''} description={item.type ?? ''} />
+					<InformationCard key={index} title={item.name ?? ''} description={item.type ?? ''} onClick={() => navigateToDetail(item.id ?? '')} />
 				))}
 				{loading && (
 					<Loading>

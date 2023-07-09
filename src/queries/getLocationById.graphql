@@ -1,0 +1,13 @@
+query GetLocationById($id: ID!) {
+	location(id: $id) {
+		name
+		type
+		dimension
+		residents {
+			id
+			name
+			image
+			type
+		}
+	}
+}
