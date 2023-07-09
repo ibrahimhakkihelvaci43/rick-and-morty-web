@@ -9,8 +9,10 @@ import formatDate from '~/utils/formatDate/formatDate'
 import { useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import MoonLoader from 'react-spinners/MoonLoader'
+import { useRouter } from 'next/router'
 
 const Episodes = ({ episodes }: { episodes: Episode[] }) => {
+	const router = useRouter()
 	const [episodesData, setEpisodesData] = useState(episodes)
 	const [getMoreEpisode, { loading }] = useLazyQuery(GetEpisodesDocument)
 	const [page, setPage] = useState(2)
@@ -34,6 +36,10 @@ const Episodes = ({ episodes }: { episodes: Episode[] }) => {
 		if (data && data.episodes) {
 			setEpisodesData(data.episodes.results ?? [])
 		}
+	}
+
+	const navigateToDetail = (id: string) => {
+		router.push(`/episode-detail/${id}`)
 	}
 
 	const handleScrollEnd = async () => {
@@ -62,6 +68,7 @@ const Episodes = ({ episodes }: { episodes: Episode[] }) => {
 						title={item.name ?? ''}
 						description={formatDate(item.air_date ?? '')}
 						extraValue={item.episode ?? ''}
+						onClick={() => navigateToDetail(item.id ?? '')}
 					/>
 				))}
 				{loading && (

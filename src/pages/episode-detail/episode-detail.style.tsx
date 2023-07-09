@@ -19,3 +19,9 @@ export const SectionTitle = styled.div`
 	line-height: 30px;
 	margin-bottom: 16px;
 `
+
+export const Characters = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+`

@@ -1,8 +1,13 @@
-import { LocationDetailBase, Content, SectionTitle } from './episode-detail.style'
+import { LocationDetailBase, Content, SectionTitle, Characters } from './episode-detail.style'
 import DetailCard from '~/components/DetailCard/DetailCard'
 import CharacterCard from '~/components/CharacterCard/CharacterCard'
+import { GetServerSideProps } from 'next/types'
+import client from '../../../apollo-client'
+import { Episode, GetEpisodeByIdDocument, GetEpisodeByIdQuery } from '~/generated/graphql'
+import formatDate from '~/utils/formatDate/formatDate'
 
-const LocationDetail = () => {
+const LocationDetail = ({ episode }: { episode: Episode }) => {
+	const { name, air_date, characters } = episode
 	const items = [
 		{
 			title: 'Rick Sanchez',
@@ -39,27 +44,54 @@ const LocationDetail = () => {
 	return (
 		<LocationDetailBase>
 			<DetailCard
-				title="Earth (Replacement Dimension)"
+				title={name ?? ''}
 				details={[
 					{
 						label: 'Episode',
-						value: 'S01E01',
+						value: episode.episode ?? '',
 					},
 					{
 						label: 'Date',
-						value: 'December 2, 2013',
+						value: formatDate(air_date ?? ''),
 					},
 				]}
 			/>
-			<Content>
-				<SectionTitle>Residents</SectionTitle>
+			{characters && characters.length > 0 && (
+				<Content>
+					<SectionTitle>Residents</SectionTitle>
 
-				{items.map((item, index) => (
-					<CharacterCard key={index} {...item} />
-				))}
-			</Content>
+					<Characters>
+						{characters.map((item, index) => (
+							<CharacterCard
+								key={index}
+								id={item?.id ?? ''}
+								title={item?.name ?? ''}
+								imageUrl={item?.image ?? ''}
+								description={item?.type ?? ''}
+							/>
+						))}
+					</Characters>
+				</Content>
+			)}
 		</LocationDetailBase>
 	)
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { id } = context.query
+
+	const { data } = await client.query<GetEpisodeByIdQuery>({
+		query: GetEpisodeByIdDocument,
+		variables: {
+			id: Number(id),
+		},
+	})
+
+	return {
+		props: {
+			episode: data.episode || [],
+		},
+	}
 }
 
 export default LocationDetail

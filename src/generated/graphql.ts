@@ -221,6 +221,13 @@ export type GetCharactersQueryVariables = Exact<{
 
 export type GetCharactersQuery = { __typename?: 'Query', characters?: { __typename?: 'Characters', info?: { __typename?: 'Info', count?: number | null } | null, results?: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, status?: string | null, image?: string | null, species?: string | null } | null> | null } | null };
 
+export type GetEpisodeByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetEpisodeByIdQuery = { __typename?: 'Query', episode?: { __typename?: 'Episode', name?: string | null, episode?: string | null, air_date?: string | null, characters: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null, species?: string | null } | null> } | null };
+
 export type GetEpisodesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -352,6 +359,49 @@ export function useGetCharactersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetCharactersQueryHookResult = ReturnType<typeof useGetCharactersQuery>;
 export type GetCharactersLazyQueryHookResult = ReturnType<typeof useGetCharactersLazyQuery>;
 export type GetCharactersQueryResult = Apollo.QueryResult<GetCharactersQuery, GetCharactersQueryVariables>;
+export const GetEpisodeByIdDocument = gql`
+    query GetEpisodeById($id: ID!) {
+  episode(id: $id) {
+    name
+    episode
+    air_date
+    characters {
+      id
+      name
+      image
+      species
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetEpisodeByIdQuery__
+ *
+ * To run a query within a React component, call `useGetEpisodeByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEpisodeByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEpisodeByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEpisodeByIdQuery(baseOptions: Apollo.QueryHookOptions<GetEpisodeByIdQuery, GetEpisodeByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEpisodeByIdQuery, GetEpisodeByIdQueryVariables>(GetEpisodeByIdDocument, options);
+      }
+export function useGetEpisodeByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEpisodeByIdQuery, GetEpisodeByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEpisodeByIdQuery, GetEpisodeByIdQueryVariables>(GetEpisodeByIdDocument, options);
+        }
+export type GetEpisodeByIdQueryHookResult = ReturnType<typeof useGetEpisodeByIdQuery>;
+export type GetEpisodeByIdLazyQueryHookResult = ReturnType<typeof useGetEpisodeByIdLazyQuery>;
+export type GetEpisodeByIdQueryResult = Apollo.QueryResult<GetEpisodeByIdQuery, GetEpisodeByIdQueryVariables>;
 export const GetEpisodesDocument = gql`
     query GetEpisodes($page: Int, $name: String) {
   episodes(page: $page, filter: {name: $name}) {
