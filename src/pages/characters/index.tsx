@@ -16,7 +16,7 @@ interface IFilterData extends ICharacterFilterFormData {
 	name?: string
 }
 
-const Characters = ({ characters }: { characters: Character[] }) => {
+const Characters = ({ characters = [] }: { characters: Character[] }) => {
 	const [charactersData, setCharactersData] = useState(characters)
 	const [getMoreCharacter, { loading }] = useLazyQuery(GetCharactersDocument)
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
