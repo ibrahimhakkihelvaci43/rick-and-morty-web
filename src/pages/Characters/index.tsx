@@ -84,6 +84,7 @@ const Characters = ({ characters }: { characters: Character[] }) => {
 				{charactersData.map((character, index) => (
 					<CharacterCard
 						key={index}
+						id={character.id ?? ''}
 						title={character.name ?? ''}
 						imageUrl={character.image ?? ''}
 						description={character.species ?? ''}

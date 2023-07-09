@@ -26,7 +26,6 @@ export const StyledImage = styled(Image)`
 	width: 100%;
 `
 
-
 export const Loading = styled.div`
 	width: 100%;
 	margin-top: 24px;

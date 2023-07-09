@@ -4,6 +4,7 @@ query GetCharacters($page: Int, $name: String, $species: String, $gender: String
 			count
 		}
 		results {
+			id
 			name
 			status
 			image

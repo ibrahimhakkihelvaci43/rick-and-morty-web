@@ -24,11 +24,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const CharacterDetail = ({ character }: { character: Character }) => {
-	const { name, gender, species, created, status, type, location, episode } = character
-	console.log(character)
+	const { name, gender, species, status, type, location, episode, image, origin } = character
 	return (
 		<CharacterDetailBase>
-			<CharacterProfile name={character.name ?? ''} imageUrl={character.image ?? ''} />
+			<CharacterProfile name={name ?? ''} imageUrl={image ?? ''} />
 			<Content>
 				<CharacterInfoSection
 					title="Character Info"
@@ -47,7 +46,7 @@ const CharacterDetail = ({ character }: { character: Character }) => {
 						},
 						{
 							title: 'Origin',
-							value: character.origin?.name ?? '',
+							value: origin?.name ?? '',
 						},
 						{
 							title: 'Type',
