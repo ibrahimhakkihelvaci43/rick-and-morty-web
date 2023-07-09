@@ -20,5 +20,6 @@ export const SectionTitle = styled.div`
 export const Residents = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 24px;
+	gap: 24px; 
+	
 `

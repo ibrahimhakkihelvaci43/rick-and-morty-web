@@ -16,7 +16,7 @@ export const Content = styled.div`
 		flex-wrap: wrap;
 
 		> div {
-			flex: calc(50% - 24px);
+			max-width: calc(50% - 24px);
 		}
 	}
 `

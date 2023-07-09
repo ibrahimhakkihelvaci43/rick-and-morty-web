@@ -50,7 +50,7 @@ const CharacterDetail = ({ character }: { character: Character }) => {
 								title: item?.episode ?? '',
 								value: item?.name ?? '',
 								extraValue: formatDate(item?.air_date ?? ''),
-								href: '/',
+								href: `/episode-detail/${item?.id}`,
 							})) ?? []
 						}
 					/>

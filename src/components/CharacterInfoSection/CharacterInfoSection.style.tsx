@@ -15,10 +15,11 @@ export const Content = styled.div`
 	padding: 0 16px;
 `
 
-export const ListItem = styled.div`
+export const ListItem = styled.div<{isLink?: boolean}>`
 	margin-top: 13px;
 	border-bottom: 1px solid rgba(33, 33, 33, 0.08);
 	position: relative;
+	cursor:   ${(props) => (props.isLink ? 'pointer' : 'unset')};
 `
 
 export const ListItemTitle = styled.div`

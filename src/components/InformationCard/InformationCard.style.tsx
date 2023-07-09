@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import NavigateNext from '~/assets/icons/NavigateNext'
 
 export const InformationCardBase = styled.div`
 	height: 128px;
@@ -12,6 +11,9 @@ export const InformationCardBase = styled.div`
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	padding: 20px;
+	text-align: center;
+	cursor: pointer;
 `
 
 export const Title = styled.div`

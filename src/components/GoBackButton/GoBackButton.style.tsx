@@ -5,6 +5,7 @@ export const GoBackButtonBase = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	padding: 24px 24px 0px 24px;
 `
 
 export const Label = styled.div`

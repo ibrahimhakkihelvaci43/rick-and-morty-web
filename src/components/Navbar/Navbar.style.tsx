@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Image from 'next/image'
 import styled from 'styled-components'
 import Menu from '~/assets/icons/Menu'
 
@@ -9,6 +9,7 @@ export const NavbarBase = styled.div`
 	position: sticky;
 	top: 0;
 	background-color: #fff;
+	z-index: 99;
 `
 
 export const Header = styled.div`
@@ -45,4 +46,10 @@ export const StyledLink = styled.div`
 	font-size: 24px;
 	font-weight: 500;
 	line-height: 30px;
+	cursor: pointer;
+`
+
+
+export const StyledImage = styled(Image)`
+	cursor: pointer;
 `

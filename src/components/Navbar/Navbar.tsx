@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Content, NavbarBase, StyledIcon, Header, StyledLink } from './Navbar.style'
-import Image from 'next/image'
+import { Content, NavbarBase, StyledIcon, Header, StyledLink, StyledImage } from './Navbar.style'
 import { useRouter } from 'next/router'
 
 const Navbar = () => {
@@ -38,13 +37,13 @@ const Navbar = () => {
 	return (
 		<NavbarBase>
 			<Header>
-				<Image src="/images/logo.png" width={46} height={49} alt="logo" />
+				<StyledImage onClick={() => router.push('/')} src="/images/logo.png" width={46} height={49} alt="logo" />
 				<StyledIcon data-testid="menu-icon" onClick={() => setIsOpen(!isOpen)} />
 			</Header>
 			{isOpen && (
 				<Content>
 					{links.map((link, index) => (
-						<StyledLink role='link' key={index} onClick={() => onClickItem(link.href)}>
+						<StyledLink role="link" key={index} onClick={() => onClickItem(link.href)}>
 							{link.label}
 						</StyledLink>
 					))}

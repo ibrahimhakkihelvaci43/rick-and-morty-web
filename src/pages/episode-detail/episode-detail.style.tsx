@@ -24,4 +24,13 @@ export const Characters = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+
+	@media (min-width: 750px) {
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		> div {
+			max-width: calc(50% - 24px);
+		}
+	}
 `

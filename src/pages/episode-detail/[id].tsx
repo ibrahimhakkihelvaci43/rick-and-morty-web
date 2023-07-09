@@ -8,39 +8,7 @@ import formatDate from '~/utils/formatDate/formatDate'
 
 const LocationDetail = ({ episode }: { episode: Episode }) => {
 	const { name, air_date, characters } = episode
-	const items = [
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-		{
-			title: 'Rick Sanchez',
-			description: 'Human',
-			imageUrl: '/images/RickSanchez.png',
-		},
-	]
-
+	 
 	return (
 		<LocationDetailBase>
 			<DetailCard
@@ -58,7 +26,7 @@ const LocationDetail = ({ episode }: { episode: Episode }) => {
 			/>
 			{characters && characters.length > 0 && (
 				<Content>
-					<SectionTitle>Residents</SectionTitle>
+					<SectionTitle>Cast</SectionTitle>
 
 					<Characters>
 						{characters.map((item, index) => (
