@@ -7,7 +7,6 @@ import { GetLocationByIdDocument, GetLocationByIdQuery, Location } from '~/gener
 
 const LocationDetail = ({ location }: { location: Location }) => {
 	const { name, type, dimension, residents } = location
-
 	return (
 		<LocationDetailBase>
 			<DetailCard
