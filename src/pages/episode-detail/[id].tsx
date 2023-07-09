@@ -8,7 +8,6 @@ import formatDate from '~/utils/formatDate/formatDate'
 
 const LocationDetail = ({ episode }: { episode: Episode }) => {
 	const { name, air_date, characters } = episode
-	 
 	return (
 		<LocationDetailBase>
 			<DetailCard
