@@ -2,7 +2,7 @@ import { getPage } from 'next-page-tester'
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-it('renders locatons page with data', async () => {
+test('renders locatons page with data', async () => {
 	const { render } = await getPage({
 		route: '/locations',
 	})
@@ -12,7 +12,7 @@ it('renders locatons page with data', async () => {
 	expect(screen.getAllByTestId('information-card')).toHaveLength(20)
 })
 
-it('fetches the filtered data', async () => {
+test('fetches the filtered data', async () => {
 	const { render } = await getPage({
 		route: '/locations',
 	})
@@ -28,7 +28,7 @@ it('fetches the filtered data', async () => {
 
 
 
-it('filters by name', async () => {
+test('filters by name', async () => {
 	const { render } = await getPage({
 		route: '/locations',
 	})

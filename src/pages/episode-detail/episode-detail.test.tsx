@@ -1,7 +1,7 @@
 import { getPage } from 'next-page-tester'
 import { screen } from '@testing-library/react'
 
-it('renders episode detail page with data', async () => {
+test('renders episode detail page with data', async () => {
 	const { render } = await getPage({
 		route: '/episode-detail/1',
 	})
